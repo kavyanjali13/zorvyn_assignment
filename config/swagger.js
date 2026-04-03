@@ -1,25 +1,4 @@
-// import swaggerJsdoc from "swagger-jsdoc";
 
-// const options = {
-//   definition: {
-//     openapi: "3.0.0",
-//     info: {
-//       title: "Expense Tracker API",
-//       version: "1.0.0",
-//       description: "API documentation"
-//     },
-//     servers: [
-//       {
-//         url: "http://localhost:5000/api"
-//       }
-//     ]
-//   },
-//   apis: ["./routes/*.js"]
-// };
-
-// const swaggerSpec = swaggerJsdoc(options);
-
-// export default swaggerSpec;
 import swaggerJsdoc from "swagger-jsdoc";
 
 const options = {
@@ -30,23 +9,50 @@ const options = {
       version: "1.0.0",
       description: "API documentation for Expense Tracker backend"
     },
+
     servers: [
       {
         url: "https://zorvyn-assignment-c46n.onrender.com"
       }
     ],
+
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT"
+        }
+      }
+    },
+
+    security: [{ bearerAuth: [] }],
+
     tags: [
       { name: "Auth", description: "Authentication APIs" },
       { name: "Dashboard", description: "Dashboard analytics APIs" },
       { name: "Records", description: "Financial records APIs" },
       { name: "Users", description: "User management APIs" }
     ],
+
     paths: {
 
       "/api/auth/register": {
         post: {
           tags: ["Auth"],
           summary: "Register new user",
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                example: {
+                  name: "Anjali",
+                  email: "anjali@test.com",
+                  password: "123456"
+                }
+              }
+            }
+          },
           responses: {
             201: { description: "User registered successfully" }
           }
@@ -57,6 +63,17 @@ const options = {
         post: {
           tags: ["Auth"],
           summary: "Login user",
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                example: {
+                  email: "anjali@test.com",
+                  password: "123456"
+                }
+              }
+            }
+          },
           responses: {
             200: { description: "Login successful" }
           }
@@ -66,7 +83,7 @@ const options = {
       "/api/dashboard/summary": {
         get: {
           tags: ["Dashboard"],
-          summary: "Get income, expense and balance"
+          summary: "Get total income, expense and balance"
         }
       },
 
@@ -94,26 +111,105 @@ const options = {
       "/api/records": {
         get: {
           tags: ["Records"],
-          summary: "Get all records (supports pagination, filtering, sorting)"
+          summary: "Get records with filtering, pagination, sorting and search",
+          parameters: [
+            {
+              name: "page",
+              in: "query",
+              schema: { type: "integer" },
+              description: "Page number"
+            },
+            {
+              name: "limit",
+              in: "query",
+              schema: { type: "integer" },
+              description: "Number of records per page"
+            },
+            {
+              name: "type",
+              in: "query",
+              schema: { type: "string" },
+              description: "Filter by record type (income/expense)"
+            },
+            {
+              name: "category",
+              in: "query",
+              schema: { type: "string" },
+              description: "Filter by category"
+            },
+            {
+              name: "search",
+              in: "query",
+              schema: { type: "string" },
+              description: "Search records by category or notes"
+            },
+            {
+              name: "sort",
+              in: "query",
+              schema: { type: "string" },
+              description: "Sort by field (example: -amount, -date)"
+            }
+          ]
         },
+
         post: {
           tags: ["Records"],
-          summary: "Create new record (Admin only)"
+          summary: "Create new record (Admin only)",
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                example: {
+                  amount: 2300,
+                  type: "expense",
+                  category: "groceries",
+                  date: "2026-02-06",
+                  notes: "Weekly grocery shopping"
+                }
+              }
+            }
+          }
         }
       },
 
       "/api/records/{id}": {
         get: {
           tags: ["Records"],
-          summary: "Get record by ID"
+          summary: "Get record by ID",
+          parameters: [
+            {
+              name: "id",
+              in: "path",
+              required: true,
+              schema: { type: "string" }
+            }
+          ]
         },
+
         patch: {
           tags: ["Records"],
-          summary: "Update record"
+          summary: "Update record",
+          parameters: [
+            {
+              name: "id",
+              in: "path",
+              required: true,
+              schema: { type: "string" }
+            }
+          ]
         },
+
         delete: {
           tags: ["Records"],
-          summary: "Soft delete record"
+          summary: "Soft delete record",
+          parameters: [
+            {
+              name: "id",
+              in: "path",
+              required: true,
+              schema: { type: "string" }
+            }
+          ]
         }
       },
 
@@ -121,24 +217,21 @@ const options = {
         get: {
           tags: ["Users"],
           summary: "Get all users (Admin only)"
-        },
-        post: {
-          tags: ["Users"],
-          summary: "Create user (Admin only)"
         }
       },
 
-      "/api/users/{id}/role": {
+      "/api/users/{id}": {
         patch: {
           tags: ["Users"],
-          summary: "Update user role"
-        }
-      },
-
-      "/api/users/{id}/status": {
-        patch: {
-          tags: ["Users"],
-          summary: "Update user status"
+          summary: "Update user role/status/name/email",
+          parameters: [
+            {
+              name: "id",
+              in: "path",
+              required: true,
+              schema: { type: "string" }
+            }
+          ]
         }
       }
 
