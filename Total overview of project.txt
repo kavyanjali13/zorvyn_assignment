@@ -1,0 +1,66 @@
+
+-> implemented protected routes
+-> implemented JWT authentication
+-> ROle-based control
+-> soft delete
+->Pagination
+->Filtering
+->Sorting
+->Search Support
+
+
+Base URL--> http://localhost:5000/api
+
+
+For Viewer--> who only has read-only access
+
+GET /api/dashboard/summary                 (Shows total income, total expense, and balance.)
+GET /api/dashboard/category-summary        (Shows spending grouped by category.)
+GET /api/dashboard/monthly-trends          (Shows income vs expense per month.)
+GET /api/dashboard/overview                (summary+category+monthly trends)
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+for analyst --> who  can view and analyze
+GET /appi/records                         (get all the records)
+GET /api/records?page=1&limit=10          (pagination)
+GET /api/records?type=expense             (Filter records by type)
+GET /api/records?category=food            (Filter records by category)
+GET /api/records?search=grocery           (earch records by category or notes)
+GET /api/records?sort=-amount             (Sort records by amount)
+GET /api/records?sort=-date               (Sort records by date)
+GET /api/records/:id                      (Fetch a single record by ID)
+
+GET /api/dashboard/summary                 (Shows total income, total expense, and balance.)
+GET /api/dashboard/category-summary        (Shows spending grouped by category.)
+GET /api/dashboard/monthly-trends          (Shows income vs expense per month.)
+GET /api/dashboard/overview                (summary+category+monthly trends)
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+for admin --> who have full system access
+
+GET api/users                            (all users including viewers, analysts, and admins.)
+PATCH api/users/:id                      (can update role,status,name,email of viewer and analyst)
+GET api/records                          (can get all the records)
+POST api/records                         (can create the records)
+PATCH api/records/:id                    (can Modify record details)
+DELETE api/reocrds                       (Soft delete a record (sets isDeleted = true instead of permanently deleting it))
+
+
+GET /appi/records                         (get all the records)
+GET /api/records?page=1&limit=10          (pagination)
+GET /api/records?type=expense             (Filter records by type)
+GET /api/records?category=food            (Filter records by category)
+GET /api/records?search=grocery           (earch records by category or notes)
+GET /api/records?sort=-amount             (Sort records by amount)
+GET /api/records/:id                      (Fetch a single record by ID)
+
+GET /api/dashboard/summary                 (Shows total income, total expense, and balance.)
+GET /api/dashboard/category-summary        (Shows spending grouped by category.)
+GET /api/dashboard/monthly-trends          (Shows income vs expense per month.)
+GET /api/dashboard/overview                (summary+category+monthly trends)
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
