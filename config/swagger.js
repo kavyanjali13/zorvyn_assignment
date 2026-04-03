@@ -48,7 +48,8 @@ const options = {
                 example: {
                   name: "Anjali",
                   email: "anjali@test.com",
-                  password: "123456"
+                  password: "123456",
+                  role: :"admin"
                 }
               }
             }
