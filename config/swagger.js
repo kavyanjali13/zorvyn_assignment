@@ -49,7 +49,7 @@ const options = {
                   name: "Anjali",
                   email: "anjali@test.com",
                   password: "123456",
-                  role: :"admin"
+                  role:"admin"
                 }
               }
             }
