@@ -9,6 +9,8 @@ import userRoutes from "./routes/userroutes.js";
 import recordRoutes from "./routes/recordroutes.js";
 import dashboardRoutes from "./routes/dashboardroutes.js";
 import authRoutes from "./routes/authroutes.js";
+import swaggerUi from "swagger-ui-express";
+import swaggerSpec from "./config/swagger.js";
 
 dotenv.config();
 
@@ -27,6 +29,7 @@ const limiter = rateLimit({
 app.use(limiter);
 
 app.use(express.json());
+app.use("/swagger-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(cors());
 app.use(helmet());
